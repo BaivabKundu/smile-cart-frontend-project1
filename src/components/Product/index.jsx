@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 
+import productsApi from "apis/products";
 import { Header, PageNotFound, PageLoader } from "components/commons";
 import { Typography } from "neetoui";
 import { append, isNotNil } from "ramda";
 import { useParams } from "react-router-dom";
 
 import Carousel from "./Carousel";
-
-import productsApi from "../../apis/products";
 
 const Product = () => {
   const { slug } = useParams();
