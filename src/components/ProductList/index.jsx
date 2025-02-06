@@ -1,27 +1,52 @@
 import { useState } from "react";
 import { Header, PageLoader } from "components/commons";
-import useDebounce from "hooks/useDebounce";
+import useFuncDebounce from "hooks/useFuncDebounce";
 import { Search } from "neetoicons";
 import { Input, NoData, Pagination } from "neetoui";
-import { isEmpty } from "ramda";
+import { isEmpty, mergeLeft } from "ramda";
 import { useFetchProducts } from "hooks/reactQuery/useProductsApi";
 import ProductListItem from "./ProductListItem";
 import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from "./constants";
+import { useHistory } from "react-router-dom";
+import { buildUrl } from "utils/url";
+import routes from "routes";
+import useQueryParams from "hooks/useQueryParams";
+import { filterNonNull } from "neetocist";
 
 const ProductList = () => {
-  const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_INDEX);
+  const queryParams = useQueryParams();
+  const { page, pageSize, searchTerm = "" } = queryParams;
 
-  const [searchKey, setSearchKey] = useState("");
-  const debouncedSearchKey = useDebounce(searchKey);
+  const [searchKey, setSearchKey] = useState(searchTerm);
+
+  const updateQueryParams = useFuncDebounce(value => {
+    const params = {
+      page: DEFAULT_PAGE_INDEX,
+      pageSize: DEFAULT_PAGE_SIZE,
+      searchTerm: value || null,
+    };
+
+    history.replace(buildUrl(routes.products.index, filterNonNull(params)));
+  });
 
   const productsParams = {
-    searchTerm: debouncedSearchKey,
-    page: currentPage,
-    pageSize: DEFAULT_PAGE_SIZE,
+    searchTerm,
+    page: Number(page) || DEFAULT_PAGE_INDEX,
+    pageSize: Number(pageSize) || DEFAULT_PAGE_SIZE,
   };
 
   const { data: { products = [], totalProductsCount } = {}, isLoading } =
     useFetchProducts(productsParams);
+
+  const history = useHistory();
+
+  const handlePageNavigation = page =>
+    history.replace(
+      buildUrl(
+        routes.products.index,
+        mergeLeft({ page, pageSize: DEFAULT_PAGE_SIZE }, queryParams)
+      )
+    );
 
   if (isLoading) return <PageLoader />;
 
@@ -38,9 +63,9 @@ const ProductList = () => {
                 prefix={<Search />}
                 type="search"
                 value={searchKey}
-                onChange={event => {
-                  setSearchKey(event.target.value);
-                  setCurrentPage(DEFAULT_PAGE_INDEX);
+                onChange={({ target: { value } }) => {
+                  updateQueryParams(value);
+                  setSearchKey(value);
                 }}
               />
             }
@@ -59,9 +84,9 @@ const ProductList = () => {
       <div className="my-5 flex justify-center">
         <Pagination
           count={totalProductsCount}
-          navigate={page => setCurrentPage(page)}
-          pageNo={currentPage || DEFAULT_PAGE_INDEX}
-          pageSize={DEFAULT_PAGE_SIZE}
+          navigate={handlePageNavigation}
+          pageNo={Number(page) || DEFAULT_PAGE_INDEX}
+          pageSize={Number(pageSize) || DEFAULT_PAGE_SIZE}
         />
       </div>
     </>
