@@ -1,43 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import productsApi from "apis/products";
+// import productsApi from "apis/products";
 import { Header, PageLoader } from "components/commons";
 import useDebounce from "hooks/useDebounce";
 import { Search } from "neetoicons";
 import { Input, NoData } from "neetoui";
 import { isEmpty } from "ramda";
-
+import { useFetchProducts } from "hooks/reactQuery/useProductsApi";
 import ProductListItem from "./ProductListItem";
 
 const ProductList = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [products, setProducts] = useState([]);
-
   const [searchKey, setSearchKey] = useState("");
   const debouncedSearchKey = useDebounce(searchKey);
 
-  const fetchProducts = async () => {
-    try {
-      const { products } = await productsApi.fetch({
-        searchTerm: debouncedSearchKey,
-      });
-      setProducts(products);
-    } catch (error) {
-      console.log("An error occurred:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, [debouncedSearchKey]);
+  const { data: { products = [] } = {}, isLoading } = useFetchProducts({
+    searchTerm: debouncedSearchKey,
+  });
 
   if (isLoading) return <PageLoader />;
 
   return (
     <div className="flex h-screen flex-col">
-      <div className="flex h-full flex-col justify-between">
+      <div className="flex h-full flex-col">
         <Header
           shouldShowBackButton={false}
           title="Smile cart"
