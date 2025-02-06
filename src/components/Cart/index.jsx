@@ -20,10 +20,6 @@ const Cart = () => {
   const totalMrp = cartTotalOf(products, MRP);
   const totalOfferPrice = cartTotalOf(products, OFFER_PRICE);
 
-  //   useEffect(() => {
-  //     fetchCartProducts();
-  //   }, [cartItems]);
-
   if (isLoading) return <PageLoader />;
 
   if (isEmpty(products)) {
