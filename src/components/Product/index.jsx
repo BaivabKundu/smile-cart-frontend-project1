@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import routes from "routes";
 import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import Carousel from "./Carousel";
+import withTitle from "utils/withTitle";
+import i18n from "i18next";
 
 const Product = () => {
   const { slug } = useParams();
@@ -58,4 +60,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default withTitle(Product, i18n.t("product"));

@@ -12,6 +12,7 @@ import { buildUrl } from "utils/url";
 import routes from "routes";
 import useQueryParams from "hooks/useQueryParams";
 import { filterNonNull } from "neetocist";
+import withTitle from "utils/withTitle";
 
 const ProductList = () => {
   const queryParams = useQueryParams();
@@ -93,4 +94,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default withTitle(ProductList);
