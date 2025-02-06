@@ -8,9 +8,11 @@ import { cartTotalOf } from "components/utils";
 import { NoData, Toastr } from "neetoui";
 import { isEmpty, keys } from "ramda";
 import useCartItemsStore from "stores/useCartItemsStore";
+import i18n from "i18next";
 
 import PriceCard from "./PriceCard";
 import ProductCard from "./ProductCard";
+import withTitle from "utils/withTitle";
 
 const Cart = () => {
   const { cartItems, setSelectedQuantity } = useCartItemsStore.pick();
@@ -87,4 +89,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default withTitle(Cart, i18n.t("cart.title"));
