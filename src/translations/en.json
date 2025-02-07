@@ -48,6 +48,10 @@
     "emailInvalid": "Email address is invalid"
   },
   "confirmOrder": "Confirm order",
+  "subtotal": "Subtotal <span>${{totalPrice}}</span>",
+  "totalPayablePrice": "Total Payable <span>${{totalPrice}}</span>",
+  "deliveryCharges": "Delivery charges <span>FREE</span>",
+  "saveInformationForNextTime": "Save this information for next time",
   "cart": {
     "title": "My cart",
     "empty": "Your cart is empty!"
