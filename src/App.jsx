@@ -8,6 +8,7 @@ import PageNotFound from "./components/commons/PageNotFound";
 import Product from "./components/Product";
 import ProductList from "./components/ProductList";
 import CartItemsContext from "./contexts/CartItemsContext";
+import Checkout from "./components/Checkout";
 
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -15,10 +16,11 @@ const App = () => {
   return (
     <CartItemsContext.Provider value={[cartItems, setCartItems]}>
       <Switch>
+        <Route exact component={Cart} path={routes.cart} />
+        <Route exact component={Checkout} path={routes.checkout} />
         <Route exact component={Product} path={routes.products.show} />
         <Route exact component={ProductList} path={routes.products.index} />
         <Redirect exact from={routes.root} to={routes.products.index} />
-        <Route exact component={Cart} path={routes.cart} />
         <Route component={PageNotFound} path="*" />
       </Switch>
     </CartItemsContext.Provider>
