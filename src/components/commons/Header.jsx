@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import routes from "routes";
 import useCartItemsStore from "stores/useCartItemsStore";
+import { memo } from "react";
 
 const Header = ({ title, shouldShowBackButton = true, actionBlock }) => {
   const history = useHistory();
@@ -47,4 +48,4 @@ const Header = ({ title, shouldShowBackButton = true, actionBlock }) => {
   );
 };
 
-export default Header;
+export default memo(Header);
